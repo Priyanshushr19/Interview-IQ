@@ -1,8 +1,3 @@
-import admin from "firebase-admin"; // 🔥 ADD THIS
-import genToken from "../config/token.js";
-import User from "../models/user.model.js";
-
-
 import genToken from "../config/token.js"
 import User from "../models/user.model.js"
 
