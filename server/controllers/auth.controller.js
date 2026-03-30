@@ -3,9 +3,17 @@ import User from "../models/user.model.js"
 
 export const googleAuth = async (req, res) => {
   try {
-    console.log("BODY:", req.body); // 🔥 MUST ADD
+    console.log("BODY:", req.body);
 
-    const { name, email } = req.body;
+    const { token } = req.body;
+
+    // 🔥 decode Firebase token (without firebase-admin)
+    const decoded = JSON.parse(
+      Buffer.from(token.split('.')[1], 'base64').toString()
+    );
+
+    const email = decoded.email;
+    const name = decoded.name;
 
     if (!email) {
       return res.status(400).json({ message: "Email missing" });
@@ -17,9 +25,9 @@ export const googleAuth = async (req, res) => {
       user = await User.create({ name, email });
     }
 
-    let token = await genToken(user._id);
+    let jwtToken = await genToken(user._id);
 
-    res.cookie("token", token, {
+    res.cookie("token", jwtToken, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
@@ -30,10 +38,10 @@ export const googleAuth = async (req, res) => {
     return res.status(200).json(user);
 
   } catch (error) {
-    console.log("ERROR:", error); // 🔥 THIS WILL REVEAL EVERYTHING
+    console.log("ERROR:", error);
     return res.status(500).json({ message: "Google auth error" });
   }
-};;
+};
 
 // export const googleAuth = async (req,res) => {
 //     try {
