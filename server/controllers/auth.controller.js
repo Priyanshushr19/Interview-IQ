@@ -33,7 +33,7 @@ export const googleAuth = async (req, res) => {
     console.log("ERROR:", error); // 🔥 THIS WILL REVEAL EVERYTHING
     return res.status(500).json({ message: "Google auth error" });
   }
-};
+};;
 
 // export const googleAuth = async (req,res) => {
 //     try {
